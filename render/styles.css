@@ -8,78 +8,86 @@
 .clearfix::after,
 
 :root {
-    --red: #dc3545;
-    --white: #fff;
-    --gray: #6c757d;
-    --gray-dark: #343a40;
+  --red: #dc3545;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
 }
 
 .text-uppercase {
-    text-transform: uppercase!important;
+  text-transform: uppercase !important;
 }
 
-.mb-0, .my-0 {
-    margin-top: 0;
-    margin-bottom: 0!important;
+.mb-0,
+.my-0 {
+  margin-top: 0;
+  margin-bottom: 0 !important;
 }
 
 .p-3 {
-    padding: 1rem!important;
+  padding: 1rem !important;
 }
 
 .text-center {
-    text-align: center!important;
+  text-align: center !important;
 }
 
 .list-unstyled {
-    padding-left: 0;
-    list-style: none;
+  padding-left: 0;
+  list-style: none;
 }
 
 .font-weight-bold {
-    font-weight: 700!important;
+  font-weight: 700 !important;
 }
 
 .text-muted {
-    color: #6c757d!important;
+  color: #6c757d !important;
 }
 
-dl, ol, ul {
-    margin-top: 0;
-    margin-bottom: 1rem;
+dl,
+ol,
+ul {
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 body {
-    margin: 0;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    text-align: left;
-    background-color: #fff;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
 }
 
 @font-face {
-    font-family: "Quattrocento-Bold";
-    src: url('Quattrocento-Bold.ttf');
+  font-family: "Quattrocento-Bold";
+  src: url('Quattrocento-Bold.ttf');
 }
 
 @font-face {
-    font-family: "Quattrocento-Regular";
-    src: url('Quattrocento-Regular.ttf');
+  font-family: "Quattrocento-Regular";
+  src: url('Quattrocento-Regular.ttf');
 }
 
 .container {
-    width: 100%;
-    padding: 0!important;
-    margin: 0!important;
-    max-width: 984px;
-    height: 1304px;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 1304px;
+  height: 984px;
+  overflow: hidden;
 }
-*, ::after, ::before {
-    box-sizing: border-box;
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
 }
+
 .calendar ol::after {
   content: ".";
   display: block;
@@ -95,16 +103,9 @@ Calendar Styling */
 }
 
 .month {
-  font-size: 13rem;
+  font-size: 3rem;
   font-family: "Quattrocento-Regular";
-}
-
-@media (min-width: 992px) {
-  .month {
-    font-size: 13rem;
-    line-height: 13rem;
-    font-family: "Quattrocento-Regular";
-  }
+  line-height: 3rem;
 }
 
 .calendar ol li {
@@ -113,9 +114,10 @@ Calendar Styling */
 }
 
 .calendar .day-names {
-  font-size: 3.5rem;
+  font-size: 2rem;
   line-height: 1.2;
   font-family: "Quattrocento-Regular";
+  margin-bottom: 0;
 }
 
 .calendar .day-names li {
@@ -125,8 +127,8 @@ Calendar Styling */
 }
 
 .calendar .days li {
-  /* min-height: 12rem; */
-  min-height: 11.5rem;
+  height: 16.7rem;
+  overflow: hidden;
 }
 
 .calendar .days li .date {
@@ -136,36 +138,40 @@ Calendar Styling */
 
 .calendar .date {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: bold;
   font-family: "Quattrocento-Regular";
 }
 
 .datecirclebox {
-    position: relative;
+  position: relative;
 }
 
 .datecircle {
-    margin: 0rem auto;
-    width:4rem;
-    height:4rem;
-    border-radius:2rem;
-    font-family: "Quattrocento-Regular";
-    font-size:3rem;
-    color:white;
-    line-height: 4rem;
-    text-align:center;
-    vertical-align: middle;
-    background:#ff0000;
+  margin: 0rem auto;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 2rem;
+  font-family: "Quattrocento-Regular";
+  font-size: 2rem;
+  color: white;
+  line-height: 4rem;
+  text-align: center;
+  vertical-align: middle;
+  background: #ff0000;
 }
 
 .calendar .days li .event {
   font-size: 1rem;
-  /* font-weight: bold;*/
+  /* font-weight: .month bold;*/
   padding: 0.1rem;
   /* color: black; */
   /* font-family: "Judson-Regular";*/
-  white-space: nowrap;
+  /* white-space: nowrap; */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   border-radius: 0rem;
@@ -177,7 +183,7 @@ Calendar Styling */
 }
 
 .text-multiday {
-  text-overflow: '...」'!important;
+  text-overflow: '...」' !important;
 }
 
 .calendar .days li .event.begin {
@@ -209,7 +215,7 @@ div.batt_container {
   overflow: hidden;
 }
 
-div.batt_container  {
+div.batt_container {
   z-index: 10;
 }
 
@@ -244,7 +250,7 @@ div.batt_container .battery0 {
 }
 
 div.batt_container .batteryHide {
-    display: none;
+  display: none;
 }
 
 /*

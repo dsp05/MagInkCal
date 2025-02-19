@@ -11,6 +11,7 @@ calendar and refreshing of the eInk display. In the future, I might choose to ge
 RPi device, while using a ESP32 or PiZero purely to just retrieve the image from a file host and update the screen.
 """
 
+import calendar
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -108,7 +109,7 @@ class RenderHelper:
         # calDict = {'events': eventList, 'calStartDate': calStartDate, 'today': currDate, 'lastRefresh': currDatetime, 'batteryLevel': batteryLevel}
         # first setup list to represent the 5 weeks in our calendar
         calList = []
-        for i in range(35):
+        for i in range(21):
             calList.append([])
 
         # retrieve calendar configuration
@@ -133,7 +134,7 @@ class RenderHelper:
             calendar_template = file.read()
 
         # Insert month header
-        month_name = str(calDict['today'].month)
+        month_name = calendar.month_name[calDict['today'].month]
 
         # Insert battery icon
         # batteryDisplayMode - 0: do not show / 1: always show / 2: show when battery is low
@@ -192,7 +193,7 @@ class RenderHelper:
                 elif event['allday']:
                     cal_events_text += '">' + event['summary']
                 else:
-                    cal_events_text += '">' + self.get_short_time(event['startDatetime'], is24hour) + ' ' + event[
+                    cal_events_text += '"><strong>' + self.get_short_time(event['startDatetime'], is24hour) + '</strong> ' + event[
                         'summary']
                 cal_events_text += '</div>\n'
             if len(calList[i]) > maxEventsPerDay:

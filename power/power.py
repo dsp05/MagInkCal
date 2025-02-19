@@ -16,7 +16,7 @@ class PowerHelper:
     def get_battery(self):
         # start displaying on eink display
         # command = ['echo "get battery" | nc -q 0 127.0.0.1 8423']
-        battery_float = -1
+        battery_float = 0
         try:
             ps = subprocess.Popen(('echo', 'get battery'), stdout=subprocess.PIPE)
             result = subprocess.check_output(('nc', '-q', '0', '127.0.0.1', '8423'), stdin=ps.stdout)
@@ -25,7 +25,7 @@ class PowerHelper:
             battery_level = result_str.split()[-1]
             battery_float = float(battery_level)
             #battery_level = "{:.3f}".format(battery_float)
-        except (ValueError, subprocess.CalledProcessError) as e:
+        except:
             self.logger.info('Invalid battery output')
         return battery_float
 
@@ -40,5 +40,5 @@ class PowerHelper:
             ps = subprocess.Popen(('echo', 'rtc_rtc2pi'), stdout=subprocess.PIPE)
             result = subprocess.check_output(('nc', '-q', '0', '127.0.0.1', '8423'), stdin=ps.stdout)
             ps.wait()
-        except subprocess.CalledProcessError:
+        except:
             self.logger.info('Invalid time sync command')
