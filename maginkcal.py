@@ -15,6 +15,7 @@ from pytz import timezone
 from gcal.gcal import GcalHelper
 from render.render import RenderHelper
 from power.power import PowerHelper
+from PIL import Image
 import json
 import logging
 
@@ -27,7 +28,6 @@ def main():
     displayTZ = timezone(config['displayTZ']) # list of timezones - print(pytz.all_timezones)
     thresholdHours = config['thresholdHours']  # considers events updated within last 12 hours as recently updated
     maxEventsPerDay = config['maxEventsPerDay']  # limits number of events to display (remainder displayed as '+X more')
-    isDisplayToScreen = config['isDisplayToScreen']  # set to true when debugging rendering without displaying to screen
     isShutdownOnComplete = config['isShutdownOnComplete']  # set to true to conserve power, false if in debugging mode
     batteryDisplayMode = config['batteryDisplayMode']  # 0: do not show / 1: always show / 2: show when battery is low
     weekStartDay = config['weekStartDay']  # Monday = 0, Sunday = 6
@@ -46,6 +46,9 @@ def main():
     logger.addHandler(logging.StreamHandler(sys.stdout))  # print logger to stdout
     logger.setLevel(logging.INFO)
     logger.info("Starting daily calendar update")
+    
+    import os
+    fromDevice = os.environ.get("FROM_DEVICE", False)
 
     try:
         # Establish current date and time information
@@ -77,10 +80,9 @@ def main():
                    'dayOfWeekText': dayOfWeekText, 'weekStartDay': weekStartDay, 'maxEventsPerDay': maxEventsPerDay,
                    'is24hour': is24hour}
 
-        renderService = RenderHelper(imageWidth, imageHeight, rotateAngle)
-        calBlackImage, calRedImage = renderService.process_inputs(calDict)
-
-        if isDisplayToScreen:
+        if fromDevice:
+            calBlackImage = Image.open('render/black.png')
+            calRedImage = Image.open('render/red.png')
             from display.display import DisplayHelper
             displayService = DisplayHelper(screenWidth, screenHeight)
             if currDate.weekday() == weekStartDay:
@@ -89,8 +91,13 @@ def main():
             displayService.update(calBlackImage, calRedImage)
             displayService.sleep()
 
-        currBatteryLevel = powerService.get_battery()
-        logger.info('Battery level at end: {:.3f}'.format(currBatteryLevel))
+            currBatteryLevel = powerService.get_battery()
+            logger.info('Battery level at end: {:.3f}'.format(currBatteryLevel))
+        else:
+            renderService = RenderHelper(imageWidth, imageHeight, rotateAngle)
+            calBlackImage, calRedImage = renderService.process_inputs(calDict)
+            calBlackImage.save('render/black.png')
+            calRedImage.save('render/red.png')
 
     except Exception as e:
         logger.error(e)
