@@ -63,22 +63,6 @@ def main():
         currDatetime = dt.datetime.now(displayTZ)
         logger.info("Time synchronised to {}".format(currDatetime))
         currDate = currDatetime.date()
-        calStartDate = currDate - dt.timedelta(days=((currDate.weekday() + (7 - weekStartDay)) % 7))
-        calEndDate = calStartDate + dt.timedelta(days=(3 * 7 - 1))
-        calStartDatetime = displayTZ.localize(dt.datetime.combine(calStartDate, dt.datetime.min.time()))
-        calEndDatetime = displayTZ.localize(dt.datetime.combine(calEndDate, dt.datetime.max.time()))
-
-        # Using Google Calendar to retrieve all events within start and end date (inclusive)
-        start = dt.datetime.now()
-        gcalService = GcalHelper()
-        eventList = gcalService.retrieve_events(calendars, calStartDatetime, calEndDatetime, displayTZ, thresholdHours)
-        logger.info("Calendar events retrieved in " + str(dt.datetime.now() - start))
-
-        # Populate dictionary with information to be rendered on e-ink display
-        calDict = {'events': eventList, 'calStartDate': calStartDate, 'today': currDate, 'lastRefresh': currDatetime,
-                   'batteryLevel': currBatteryLevel, 'batteryDisplayMode': batteryDisplayMode,
-                   'dayOfWeekText': dayOfWeekText, 'weekStartDay': weekStartDay, 'maxEventsPerDay': maxEventsPerDay,
-                   'is24hour': is24hour}
 
         if fromDevice:
             calBlackImage = Image.open('render/black.png')
@@ -94,6 +78,23 @@ def main():
             currBatteryLevel = powerService.get_battery()
             logger.info('Battery level at end: {:.3f}'.format(currBatteryLevel))
         else:
+            calStartDate = currDate - dt.timedelta(days=((currDate.weekday() + (7 - weekStartDay)) % 7))
+            calEndDate = calStartDate + dt.timedelta(days=(3 * 7 - 1))
+            calStartDatetime = displayTZ.localize(dt.datetime.combine(calStartDate, dt.datetime.min.time()))
+            calEndDatetime = displayTZ.localize(dt.datetime.combine(calEndDate, dt.datetime.max.time()))
+
+            # Using Google Calendar to retrieve all events within start and end date (inclusive)
+            start = dt.datetime.now()
+            gcalService = GcalHelper()
+            eventList = gcalService.retrieve_events(calendars, calStartDatetime, calEndDatetime, displayTZ, thresholdHours)
+            logger.info("Calendar events retrieved in " + str(dt.datetime.now() - start))
+
+            # Populate dictionary with information to be rendered on e-ink display
+            calDict = {'events': eventList, 'calStartDate': calStartDate, 'today': currDate, 'lastRefresh': currDatetime,
+                    'batteryLevel': currBatteryLevel, 'batteryDisplayMode': batteryDisplayMode,
+                    'dayOfWeekText': dayOfWeekText, 'weekStartDay': weekStartDay, 'maxEventsPerDay': maxEventsPerDay,
+                    'is24hour': is24hour}
+
             renderService = RenderHelper(imageWidth, imageHeight, rotateAngle)
             calBlackImage, calRedImage = renderService.process_inputs(calDict)
             calBlackImage.save('render/black.png')
